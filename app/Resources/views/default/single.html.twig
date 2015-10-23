@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+       {% include 'default/_fortune.html.twig' %}
+
+    <h2>comments</h2>
+
+    <form action="{{ path('single', { title: fortune.title }) }}" method = "post" >
+        {{ form_row(form.autor) }}
+        {{ form_row(form.content) }}
+        {{ form_row(form.submit) }}
+        {{ form_rest(form) }}
+    </form>
+
+       <ul>
+       {% for comment in fortune.comments %}
+              <li>
+                     {{ comment.content }}
+                     {{ comment.autor }}
+                     {{ comment.createdAt |date("m/d/Y H:i")}}
+              </li>
+       {% endfor %}
+       </ul>
+{% endblock %}

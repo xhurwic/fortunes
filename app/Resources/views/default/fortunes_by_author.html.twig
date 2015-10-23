@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1> {{ author }}'s fortunes</h1>
+    <ul>
+        {% for fortuneAuthor in fortuneAuthors %}
+
+            {% include 'default/_fortune.html.twig'with {fortune: fortuneAuthor} %}
+        {% endfor %}
+    </ul>
+{% endblock %}

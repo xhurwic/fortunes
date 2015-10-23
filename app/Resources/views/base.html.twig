@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Welcome!{% endblock %}</title>
+
+
+            <style>
+                body { background: black; font: 18px/1.5 sans-serif; }
+                h1, h2 { line-height: 1.2; margin: 0 0 .5em; }
+                h1 { font-size: 36px; }
+                h2 { font-size: 21px; margin-bottom: 1em; }
+                p { margin: 0 0 1em 0; }
+                a { text-decoration: none; }
+                a:hover { text-decoration: none; font-size: 1.4em;}
+                code { background: #F5F5F5; max-width: 100px; padding: 2px 6px; word-wrap: break-word; }
+                #wrapper { background: #FFF; margin: 1em auto; max-width: 800px; width: 95%; }
+                #container { padding: 2em; }
+                #welcome, #status { margin-bottom: 2em; }
+                #icon-status, #icon-book { float: left; height: 64px; margin-right: 1em; margin-top: -4px; width: 64px; }
+                #icon-book { display: none; }
+
+                h1{text-align: center; font-size: 2.5em; margin-bottom: 150px; margin-top: 100px; width: auto; color: white; border-bottom: 1px solid #b4a504;}
+                ul{ width: 75%; margin: auto;}
+                ul li { border: 2px solid #b4a504; border-radius: 20px; margin: 30px; background-color: #F5F5F5;}
+                h2 {padding-left: 50px; background-color: #D3D3D3; border-radius: 20px 20px 0 0;}
+                h2 a {color: #b4a504;}
+                ul #content{font-family: cursive; font-size: 2em; text-align: center; margin-bottom: 0;}
+                ul li #info {text-align: right; font-size: 0.9em; font-style: italic; padding-right: 70px;}
+                ul li #info #author{ color: #b4a504;}
+                ul li #vote { text-align: right; padding-right: 30px;}
+                ul li #vote #up{ color: green;}
+                ul li #vote #down{ color: red;}
+
+
+                form {text-align: center;}
+                label {color: white;}
+                input {width: 50%; height: 25px;}
+
+                nav {text-align: center;}
+                nav a{color: #b4a504; padding-right: 20px;}
+                @media (min-width: 768px) {
+                    #wrapper { width: 80%; margin: 2em auto; }
+                    #icon-book { display: inline-block; }
+                    #status a, #next a { display: block; }
+
+                    @-webkit-keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
+                    @keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
+                    .sf-toolbar { opacity: 0; -webkit-animation: fade-in 1s .2s forwards; animation: fade-in 1s .2s forwards;}
+                }
+            </style>
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+
+        {{ render(controller("AppBundle:Default:showBestRated")) }}
+
+    </body>
+</html>

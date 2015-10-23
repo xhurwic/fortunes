@@ -1,0 +1,17 @@
+
+        <li>
+                <h2><a href="{{ path('single', { title: fortune.title })}} ">{{ fortune.title }}</a></h2>
+                <p id="content">"{{ fortune.content }}"</p>
+                <p id="info">- <a id="author" href = "{{ path('by_author', { author: fortune.author }) }}">{{ fortune.author }}</a>, le {{ fortune.createdAt |date("m/d/Y H:i") }}</p>
+                <p id="vote">
+                    <a id="up" href="{{ path('vote_up', { id: fortune.id}) }}"> {{ fortune.upVote }}</a>
+                    //
+                    <a id="down" href="{{ path('vote_down', { id: fortune.id}) }}">
+                        {% if fortune.downVote != 0%}
+                            -
+                        {% endif %}
+
+                        {{ fortune.downVote }}</a>
+                </p>
+
+            </li>
