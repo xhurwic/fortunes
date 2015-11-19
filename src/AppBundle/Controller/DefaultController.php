@@ -34,7 +34,7 @@ class DefaultController extends Controller
     {
         if ($this->get('session')->has($id)) {
 
-            $this->get('session')->getFlashBag()->add('error', 'déjà voté');
+            $this->get('session')->setFlashBag('error', 'déjà voté');
             return $this->redirectToRoute("homepage");
         }
 
@@ -53,7 +53,7 @@ class DefaultController extends Controller
     public function voteDownAction($id)
     {
         if ($this->get('session')->has($id)) {
-            $this->get('session')->getFlashBag()->add('error', 'déjà voté');
+            $this->get('session')->setFlashBag()->add('error', 'déjà voté');
             return $this->redirectToRoute("homepage");
         }
 
@@ -79,7 +79,7 @@ class DefaultController extends Controller
     {
 
         return $this->render('default/fortunes_by_author.html.twig', array (
-            'fortuneAuthors' => $this->getDoctrine()->getRepository("AppBundle:Fortune")->findByAuthor ($author),
+            'fortuneAuthors' => $this->getDoctrine()->getRepository("AppBundle:Fortune")->findByAuthor($author),
             'author' => $author
         ));
     }
@@ -96,12 +96,14 @@ class DefaultController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $fortune = $form->getData();
+            $author = $fortune->getAuthor();
             $em->persist($fortune);
             $em->flush();
 
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('moderation', array(
+                'author' => $author
+            ), 302);
         }
-
 
         return $this->render('default/new.html.twig', array (
             'form' => $form->createView()
@@ -113,6 +115,9 @@ class DefaultController extends Controller
      */
     public function singleFortune (Request $request, $title)
     {
+        $fortune = new Fortune();
+        $fortune = $this->getDoctrine()->getRepository("AppBundle:Fortune")->findOne($title);
+
         $comment = new Comment();
         $form = $this->createForm(new CommentType(), new Comment());
         $form->handleRequest($request);
@@ -129,6 +134,68 @@ class DefaultController extends Controller
         return $this->render('default/single.html.twig', array (
             'fortune' =>  $this->getDoctrine()->getRepository("AppBundle:Fortune")->findOne($title),
             'form'    =>  $form->createView()
+        ));
+    }
+
+    /**
+     * @Route("/moderation/{author}", name="moderation")
+     */
+    public function listNotPublishedAction($author)
+    {
+
+       $fortunesNotPublished = $this->getDoctrine()->getRepository("AppBundle:Fortune")->finfList($author);
+
+        return $this->render('default/listModerate.html.twig', array(
+            'fortunes' => $fortunesNotPublished
+        ));
+    }
+
+    /**
+     * @Route("/setPublished/{id}", name="setPublished")
+     */
+    public function setPublished($id)
+    {
+        $fortune = $this->getDoctrine()->getRepository("AppBundle:Fortune")->find($id);
+        $fortune->isPublished();
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->redirectToRoute('moderation', array(
+            'author' => $fortune->getAuthor()
+        ), 302);
+    }
+
+    /**
+     * @Route("/edit/{id}", name="edit")
+     */
+    public function editAction (Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $fortune = $em->getRepository('AppBundle:Fortune')->find($id);
+        $author = $fortune->getAuthor();
+
+        if (!$fortune) {
+            throw $this->createNotFoundException('Unable to find Fortune.');
+        }
+
+        $form = $this->createForm(new FortuneType(), $fortune);
+        $form->handleRequest($request);
+
+
+        if ($form->isValid()) {
+
+            $fortune = $form->getData();
+            $fortune->setAuthor($author);
+            $em->persist($fortune);
+            $em->flush();
+
+            return $this->redirectToRoute('moderation', array(
+                'author' => $fortune->getAuthor()
+            ), 302);
+        }
+
+        return $this->render('default/edit.html.twig', array (
+            'form' => $form->createView(),
+            'id'   => $id
         ));
     }
 }

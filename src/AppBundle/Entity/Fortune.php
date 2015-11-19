@@ -59,6 +59,11 @@ class Fortune
     private $createdAt;
 
     /**
+     * @ORM\Column(name="published", type="bool")
+     */
+    private $published;
+
+    /**
      * @ORM\Column(name="upVote", type="integer")
      */
     private $upVote;
@@ -72,6 +77,7 @@ class Fortune
     {
         $this->upVote = 0;
         $this->downVote = 0;
+        $this->published = false;
         $this->createdAt = new \DateTime();
     }
 
@@ -193,6 +199,11 @@ class Fortune
         return $this->comments;
     }
 
+    public function getIsPublish ()
+    {
+        return $this->isPublish;
+    }
+
     public function getUpVote ()
     {
         return $this->upVote;
@@ -200,7 +211,6 @@ class Fortune
 
     public function voteUp()
     {
-
         $this->upVote = $this->upVote + 1;
     }
 
@@ -212,6 +222,11 @@ class Fortune
     public function voteDown ()
     {
         return $this->downVote = $this->downVote + 1;
+    }
+
+    public function isPublished ()
+    {
+        $this->published = true;
     }
 }
 

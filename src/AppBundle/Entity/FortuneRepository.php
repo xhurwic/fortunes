@@ -11,6 +11,7 @@ class FortuneRepository extends \Doctrine\ORM\EntityRepository
     public function findLast ()
     {
         $queryBuilder = $this->createQueryBuilder('F')
+            ->where('F.published = 1')
             ->orderBy('F.createdAt', 'DESC');
         $adapter = new DoctrineORMAdapter($queryBuilder);
         return $adapter;
@@ -26,16 +27,18 @@ class FortuneRepository extends \Doctrine\ORM\EntityRepository
     {
         return $this->createQueryBuilder('F')
             ->setMaxResults(3)
+            ->where('F.published = 1')
             ->orderBy('F.upVote - F.downVote', 'DESC')
             ->getQuery()
             ->getResult();
     }
 
-    public function findByAuthor ($author)
+    public function findByAuthor($author)
     {
         return $this->createQueryBuilder('F')
             ->setParameter("author", $author)
             ->where("F.author = :author")
+            ->andWhere('F.published = 1')
             ->getQuery()
             ->getResult();
     }
@@ -48,6 +51,15 @@ class FortuneRepository extends \Doctrine\ORM\EntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getSingleResult();
+    }
+
+    public function finfList ($author)
+    {
+        return $this->createQueryBuilder('F')
+            ->setParameter("author", $author)
+            ->where("F.author = :author")
+            ->getQuery()
+            ->getResult();
     }
 }
 

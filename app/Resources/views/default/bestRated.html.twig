@@ -2,6 +2,7 @@
 
 <ul>
     {% for fortuneRated in fortuneRateds %}
+
 {% include 'default/_fortune.html.twig' with {fortune: fortuneRated} %}
  {% endfor %}
 </ul>
