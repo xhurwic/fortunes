@@ -34,7 +34,8 @@ class DefaultController extends Controller
     {
         if ($this->get('session')->has($id)) {
 
-            $this->get('session')->setFlashBag('error', 'déjà voté');
+            $this->get('session')->getFlashBag()->set('error', 'déjà voté');
+            
             return $this->redirectToRoute("homepage");
         }
 
@@ -53,7 +54,7 @@ class DefaultController extends Controller
     public function voteDownAction($id)
     {
         if ($this->get('session')->has($id)) {
-            $this->get('session')->setFlashBag()->add('error', 'déjà voté');
+            $this->get('session')->setFlash()->add('error', 'déjà voté');
             return $this->redirectToRoute("homepage");
         }
 
@@ -151,12 +152,12 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/setPublished/{id}", name="setPublished")
+     * @Route("/publishe/{id}", name="publishe")
      */
-    public function setPublished($id)
+    public function publishe($id)
     {
         $fortune = $this->getDoctrine()->getRepository("AppBundle:Fortune")->find($id);
-        $fortune->isPublished();
+        $fortune->setPublished();
         $this->getDoctrine()->getManager()->flush();
 
         return $this->redirectToRoute('moderation', array(

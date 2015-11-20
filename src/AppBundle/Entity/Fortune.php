@@ -59,7 +59,7 @@ class Fortune
     private $createdAt;
 
     /**
-     * @ORM\Column(name="published", type="bool")
+     * @ORM\Column(name="published", type="boolean")
      */
     private $published;
 
@@ -224,9 +224,14 @@ class Fortune
         return $this->downVote = $this->downVote + 1;
     }
 
-    public function isPublished ()
+    public function setPublished ()
     {
-        $this->published = true;
+        return $this->published = true;
+    }
+
+    public function getPublished ()
+    {
+        return $this->published;
     }
 }
 

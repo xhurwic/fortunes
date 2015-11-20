@@ -15,3 +15,11 @@
                 </p>
 
             </li>
+
+             {% if app.session.flashbag.get('error') %}
+                
+                {% for message in app.session.flashbag.get('error') %}
+                    {{ message }}
+
+                {% endfor %}
+            {% endif %}

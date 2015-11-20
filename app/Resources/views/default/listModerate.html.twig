@@ -6,12 +6,12 @@
     {% for fortune in fortunes %}
         {% include 'default/_fortune.html.twig' with {fortune: fortune} %}
 
-        <p>ici : {{ fortune.published }}</p>
 
-        {% if fortune.published == 0 %}
-            <a href="{{ path('setPublished', { id: fortune.id })}} ">publier</a>
-        {% else %}
+
+        {% if fortune.published %}
             <a href="{{ path('edit', { id: fortune.id })}} ">editer</a>
+        {% else %}
+            <a href="{{ path('publishe', { id: fortune.id })}} ">publier</a>
         {% endif %}
     {% endfor %}
 {% endblock %}

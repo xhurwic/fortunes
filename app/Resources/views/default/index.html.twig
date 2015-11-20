@@ -6,10 +6,10 @@
     {% for fortune in fortunes %}
 
     {% include 'default/_fortune.html.twig'%}
-        {% if app.session.hasFlash('error') %}
+        {# {% if app.session.hasFlash('error') %}
             {% set message = app.session.getflash('error') %}
-            <p>{{ message }}</p>
-        {% endif %}
+            <p>{{ message }}</p> 
+        {% endif %} #}
     {% endfor %}
 </ul>
     <div class="pagerfanta">
